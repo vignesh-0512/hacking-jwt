@@ -13,7 +13,7 @@ app.use(express.static('public'));
 
 // Hardcoded users
 const users = [
-    { username: 'user', password: 'userpass', isAdmin: false },
+    { username: 'user', password: 'password', isAdmin: false },
     { username: 'admin', password: 'adminpass', isAdmin: true },
 ];
 
@@ -47,12 +47,59 @@ app.get('/welcome', (req, res) => {
 
     jwt.verify(token, secretKey, (err, decoded) => {
         if (err) return res.send('Token is not valid');
+
         const username = decoded.isAdmin ? 'Admin' : 'User';
         res.send(`
-            <h1>Welcome, ${username}!</h1>
-            <a href="/admin">Go to Admin Page</a>
-            <br><br>
-            <p>You can manipulate your JWT token using jwt.io or similar tools.</p>
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Welcome</title>
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        background-color: #f0f0f0;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        height: 100vh;
+                        margin: 0;
+                    }
+                    .container {
+                        background-color: white;
+                        padding: 2rem;
+                        border-radius: 8px;
+                        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+                        text-align: center;
+                        width: 300px;
+                    }
+                    h1 {
+                        margin-bottom: 1.5rem;
+                        color: #333;
+                    }
+                    a {
+                        display: inline-block;
+                        margin-top: 1rem;
+                        padding: 0.5rem 1rem;
+                        background-color: #007BFF;
+                        color: white;
+                        text-decoration: none;
+                        border-radius: 4px;
+                        transition: background-color 0.3s;
+                    }
+                    a:hover {
+                        background-color: #0056b3;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <h1>Welcome, ${username}!</h1>
+                    <a href="/admin">Go to Admin Page</a>
+                </div>
+            </body>
+            </html>
         `);
     });
 });
